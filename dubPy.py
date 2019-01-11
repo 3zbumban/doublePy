@@ -1,12 +1,19 @@
 # dupFinder.py
-import os, sys
+import os
+import sys
 import hashlib
- 
+import argparse
+
+argparser = argparse.ArgumentParser(description="Find doublicate files, give one or more paths as arguments \nUsage: python dupPy.py -p folder1 folder2 <...>")
+argparser.add_argument("-p", "--path", type=str, nargs="+", dest="paths", help="give one or more paths to dirs \nexample: \"I:\\example\\dir\\...\\...\"")
+
+args, unknown = argparser.parse_known_args()
+
 def findDup(parentFolder):
     # Dups in format {hash:[names]}
     dups = {}
     for dirName, subdirs, fileList in os.walk(parentFolder):
-        print('Scanning %s...' % dirName)
+        print('[i] Scanning %s...' % dirName)
         for filename in fileList:
             # Get the path to the file
             path = os.path.join(dirName, filename)
@@ -52,12 +59,11 @@ def printResults(dict1):
             print('_' * 50)
     else:
         print('No duplicate files found.')
- 
- 
-if __name__ == '__main__':
-    if len(sys.argv) > 1:
+
+def main():
+    if args.paths:
         dups = {}
-        folders = sys.argv[1:]
+        folders = args.paths
         for i in folders:
             # Iterate the folders given
             if os.path.exists(i):
@@ -68,4 +74,8 @@ if __name__ == '__main__':
                 sys.exit()
         printResults(dups)
     else:
-        print('Usage: python dupFinder.py folder or python dupFinder.py folder1 folder2 folder3')
+        print('[e] no paths given...')
+        sys.exit(-1)
+ 
+if __name__ == '__main__':
+    main()
