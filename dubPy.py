@@ -13,7 +13,7 @@ def findDup(parentFolder):
     # Dups in format {hash:[names]}
     dups = {}
     for dirName, subdirs, fileList in os.walk(parentFolder):
-        print('[i] Scanning %s...' % dirName)
+        print("[i] Scanning {}...".format(dirName))
         for filename in fileList:
             # Get the path to the file
             path = os.path.join(dirName, filename)
@@ -37,7 +37,7 @@ def joinDicts(dict1, dict2):
  
  
 def hashfile(path, blocksize = 65536):
-    afile = open(path, 'rb')
+    afile = open(path, "rb")
     hasher = hashlib.md5()
     buf = afile.read(blocksize)
     while len(buf) > 0:
@@ -70,12 +70,12 @@ def main():
                 # Find the duplicated files and append them to the dups
                 joinDicts(dups, findDup(i))
             else:
-                print('%s is not a valid path, please verify' % i)
+                print("[e] {}} is not a valid path, please verify".format(i))
                 sys.exit()
         printResults(dups)
     else:
-        print('[e] no paths given...')
+        print("[e] no paths given...")
         sys.exit(-1)
  
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
