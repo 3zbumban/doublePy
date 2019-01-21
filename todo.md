@@ -12,3 +12,4 @@
 * [ ] stop and continue (_pikle_?)
 * [ ] keyboardInterrupt
 * [ ] handle results
+* [ ] skip folders / filetypes

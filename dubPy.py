@@ -6,14 +6,28 @@ import argparse
 
 argparser = argparse.ArgumentParser(description="Find doublicate files, give one or more paths as arguments \nUsage: python dupPy.py -p folder1 folder2 <...>")
 argparser.add_argument("-p", "--path", type=str, nargs="+", dest="paths", help="give one or more paths to dirs \nexample: \"I:\\example\\dir\\...\\...\"")
+argparser.add_argument("-r", action="store_true", dest="topdown", help="scan topdown")
+argparser.add_argument("-f", action="store_true", dest="followlinks", help="set to follow symlinks")
+
 
 args, unknown = argparser.parse_known_args()
 
 def findDup(parentFolder):
     # Dups in format {hash:[names]}
+    if args.topdown:
+        print("[I] using topdown method")
+        t = True
+    else:
+        t = False
+    if args.followlinks:
+        print("[I] including sym-links")
+        f = True
+    else:
+        f = False
+    # start scanning:
     dups = {}
-    for dirName, subdirs, fileList in os.walk(parentFolder):
-        print("[i] Scanning {}...".format(dirName))
+    for dirName, subdirs, fileList in os.walk(parentFolder, topdown=t, followlinks=f):
+        print("[i] Scanning: {}...".format(dirName))
         for filename in fileList:
             # Get the path to the file
             path = os.path.join(dirName, filename)
@@ -62,17 +76,24 @@ def printResults(dict1):
 
 def main():
     if args.paths:
-        dups = {}
-        folders = args.paths
-        for i in folders:
-            # Iterate the folders given
-            if os.path.exists(i):
-                # Find the duplicated files and append them to the dups
-                joinDicts(dups, findDup(i))
-            else:
-                print("[e] {}} is not a valid path, please verify".format(i))
-                sys.exit()
-        printResults(dups)
+        print("[I] starting scan. quit with [ctrl + c]")
+        try:
+            dups = {}
+            folders = args.paths
+            for i in folders:
+                # Iterate the folders given
+                # todo exclude dirs / types
+                if os.path.exists(i):
+                    # Find the duplicated files and append them to the dups
+                    joinDicts(dups, findDup(i))
+                else:
+                    print("[e] {} is not a valid path, please verify".format(i))
+                    sys.exit()
+            printResults(dups)
+        except KeyboardInterrupt:
+            printResults(dups)
+        # finally:
+        #     printResults(dups)
     else:
         print("[e] no paths given...")
         sys.exit(-1)
