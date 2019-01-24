@@ -9,7 +9,6 @@ argparser.add_argument("-p", "--path", type=str, nargs="+", dest="paths", help="
 argparser.add_argument("-r", action="store_true", dest="topdown", help="scan topdown")
 argparser.add_argument("-f", action="store_true", dest="followlinks", help="set to follow symlinks")
 
-
 args, unknown = argparser.parse_known_args()
 
 def findDup(parentFolder):
@@ -64,15 +63,18 @@ def hashfile(path, blocksize = 65536):
 def printResults(dict1):
     results = list(filter(lambda x: len(x) > 1, dict1.values()))
     if len(results) > 0:
-        print('\n\nDuplicates Found:')
-        print('The following files are identical. The name could differ, but the content is identical')
-        print('_' * 50)
+        print('\n\n[A] Duplicates Found:')
+        print('[>] The following files are identical. The name could differ, but the content is identical')
+        print("_" * 80)
+        c = 0
         for result in results:
+            print("Nr: {}".format(c))
             for subresult in result:
                 print('\t{}' .format(subresult))
-            print('_' * 50)
+            print("_" * 80)
+            c += 1
     else:
-        print('No duplicate files found.')
+        print('[>] No duplicate files found.')
 
 def main():
     if args.paths:
@@ -92,6 +94,9 @@ def main():
             printResults(dups)
         except KeyboardInterrupt:
             printResults(dups)
+        except PermissionError:
+            printResults(dups)
+            pass
         # finally:
         #     printResults(dups)
     else:
@@ -100,3 +105,4 @@ def main():
  
 if __name__ == "__main__":
     main()
+    sys.exit(0)
