@@ -1,8 +1,9 @@
 # doublePy
 
-a python script to find doublicate files based on hashing
+Python script to manage doublicate musik samples.
+Works with all files
 
-## Instalation
+## Installation
 
 ```sh
 git clone https://github.com/3zbumban/doublePy.git
@@ -29,3 +30,19 @@ python dubPy.py --path <"path to folder"> <...> ... --play --remove --strategy -
 - `-rm / --remove`: move file to trash dialog
 - `-s / --strategy`: asks user to rerun process after deleting a file
 - `-sf / --save-file`: saves results to `results.txt`
+
+### Find doublicate files (all filetypes)
+
+```sh
+python dubPy.py -p <"path to folder"> <...> ...
+```
+
+optional: `-td -fl -sf`
+
+### Find doublicate samples, listen and delete
+
+```sh
+python dubPy.py -p <"path to folder"> <...> ... -pl -s -rm
+```
+
+optional: `-td -fl -sf`

@@ -93,7 +93,7 @@ def playResult(result):
         if len(result) > 1:
             p = True
             while p:
-                a = ord(input("[?] wich one to play? (a/b/c/...)? ")) - CHAR_KONST
+                a = ord(input("[?] wich one to play? (a/b/c/...) ")) - CHAR_KONST
                 if a <= len(result) - 1 and a >= 0:
                     if(result[a].endswith(".wav")):
                         play(result[a])
@@ -120,15 +120,15 @@ def playResult(result):
                     return True
                 else:
                     return False
-    except KeyError:
-        print("[E] KeyError...")
-        pass
+    except TypeError:
+        print("[E] TypeError...")
+        return True
 
 def showResults(results):
     if len(results) > 0:
         c = 0
-        print('\n\n[A] Duplicates Found:')
-        print('[>] The following files are identical. The name could differ, but the content is identical')
+        print("\n\n[A] Duplicates Found: {}".format(len(results)))
+        print("[>] The following files are identical. The name could differ, but the content is identical")
         for result in results:
             ch = 'a'
             print("_" * cols)
@@ -148,15 +148,17 @@ def showResults(results):
     return False
 
 def toFile(results):
+    c = 1
     with open("results.txt", "w") as f:
+        f.write("[>] We found {} doublicate files\n".format(len(results)))
         for result in results:
             ch = 'a'
             f.write("{}\n".format("_" * cols))
-            f.write("Nr: {}\t{} duplicates...".format(c, len(result)))
+            f.write("[i] Nr: {}\t{} duplicates...\n".format(c, len(result)))
             for subresult in result:
-                f.write('{}) \t{}' .format(ch ,subresult))
+                f.write("\t{}) \t{}\n" .format(ch ,subresult))
                 ch = chr(ord(ch) + 1)
-            f.write("{}".format("_" * cols))
+            f.write("{}\n".format("_" * cols))
             c += 1
 
 def main():
@@ -178,7 +180,8 @@ def main():
                     toFile(results)
                 e = showResults(results)
             except KeyboardInterrupt:
-                print("[e] KeyboardInterrupt...")
+                print("[e] KeyboardInterrupt exit programm...")
+                sys.exit(2)
     else:
         print("[e] no paths given...")
         sys.exit(-1)
