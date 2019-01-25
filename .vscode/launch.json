@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args": ["--path", "I:\\[SAMPLES]\\[2SUB KITS]\\2sub Drumkit"]
+            "args": ["--path", "I:\\[SAMPLES]\\[2SUB KITS]\\2sub Drumkit", "-pl", "-rm"]
         }
     ]
 }
