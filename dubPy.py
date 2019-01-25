@@ -7,11 +7,14 @@ import winsound
 import platform
 import subprocess
 from send2trash import send2trash
+import tkinter as tk
+from tkinter import filedialog
 
 BLOCK_SIZE = 65536
 CHAR_KONST = 97
 cols, rows = os.get_terminal_size()
 
+# cli arguments
 argparser = argparse.ArgumentParser(description="Find doublicate files, give one or more paths as arguments \nUsage: python dupPy.py -p folder1 folder2 <...>")
 argparser.add_argument("-p", "--path", type=str, nargs="+", dest="paths", help="give one or more paths to dirs \nexample: -p \"I:\\example\\dir\\...\\...\"")
 argparser.add_argument("-td", "--topdown", action="store_true", dest="topdown", help="add '-r' to scan topdown")
@@ -20,12 +23,26 @@ argparser.add_argument("-pl", "--play", action="store_true", dest="player", help
 argparser.add_argument("-rm", "--remove", action="store_true", dest="rem", help="add '-r' or '--remove' flag to enable remove dialog")
 argparser.add_argument("-s", "--strategy", action="store_true", dest="strat", help="add '-s' or '--strategy' flag to ask for restart after removing a file")
 argparser.add_argument("-sf", "--save-file", action="store_true", dest="tofile", help="add '-sf' or '--save-file' flag to save to a file")
-
+argparser.add_argument("-g", "--gui", action="store_true", dest="gui", help="add '-g' or '--gui' flag to open chose dir dialog")
 
 args, unknown = argparser.parse_known_args()
 
+def gui_get_path():
+    """
+    Gui to ask for target dir
+    :return: selceted dir
+    """
+    root = tk.Tk()
+    root.withdraw()
+    sdir = filedialog.askdirectory()
+    # print(type(sdir))
+    return sdir
+
 # play file with winsound
 def play(file):
+    """
+    play file with winsound or open it
+    """
     print("[>] playing: \t{}...".format(file))
     if platform.system() == "Windows":
         winsound.PlaySound(file, winsound.SND_FILENAME)
@@ -148,6 +165,9 @@ def showResults(results):
     return False
 
 def toFile(results):
+    """
+    writes results to a file
+    """
     c = 1
     with open("results.txt", "w") as f:
         f.write("[>] We found {} doublicate files\n".format(len(results)))
@@ -162,13 +182,20 @@ def toFile(results):
             c += 1
 
 def main():
-    if args.paths:
+    folders = []
+    if args.paths and not args.gui:
         print("[I] starting scan. quit with [ctrl + c]")
+        folders = args.paths
+    elif args.gui and not args.paths:
+        folders.append(gui_get_path())
+    else:
+        print("[E] plese use '-p' or '-g' not both at once")
+        folders = False
+    if folders:
         e = True
         while e:
             try:
                 dups = {}
-                folders = args.paths
                 for i in folders:
                     if os.path.exists(i):
                         joinDicts(dups, findDup(i))
