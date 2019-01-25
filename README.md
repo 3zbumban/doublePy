@@ -47,3 +47,10 @@ python dubPy.py -p <"path to folder"> <...> ... -pl -s -rm
 ```
 
 optional: `-td -fl -sf`
+
+## Build
+
+```sh
+pip install pyinstaller
+pyinstaller --onefile dubPy.py
+```
