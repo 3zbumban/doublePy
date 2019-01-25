@@ -1,7 +1,8 @@
 # doublePy
 
-Python script to manage doublicate musik samples.
-Works with all files
+Drumkits often have the same samples.
+This script finds duplicates and lets you listen and remove them.
+Also works with other file types.
 
 ## Installation
 
