@@ -24,6 +24,7 @@ argparser.add_argument("-rm", "--remove", action="store_true", dest="rem", help=
 argparser.add_argument("-s", "--strategy", action="store_true", dest="strat", help="add '-s' or '--strategy' flag to ask for restart after removing a file")
 argparser.add_argument("-sf", "--save-file", action="store_true", dest="tofile", help="add '-sf' or '--save-file' flag to save to a file")
 argparser.add_argument("-g", "--gui", action="store_true", dest="gui", help="add '-g' or '--gui' flag to open chose dir dialog")
+argparser.add_argument("-ar", "--auto-remove", action="store_true", dest="frem", help="add flag to remove second dublicate atomatically")
 
 args, unknown = argparser.parse_known_args()
 
@@ -155,11 +156,18 @@ def showResults(results):
                 ch = chr(ord(ch) + 1)
             print("_" * cols)
             c += 1
-            if(args.player):
-                if playResult(result):
-                    return True
+            if args.frem and not args.player and not args.rem and not args.strat:
+                print("[i] removing second...")
+                send2trash(result[-1])
+            else:
+                if(args.player):
+                    if playResult(result):
+                        return True
+                    else:
+                        continue
                 else:
-                    continue
+                    print("[e] dont use '-ao' flag with '-pl' '-rm' and '-s' flags")
+                    sys.exit(-2)
     else:
         print('[A] No duplicate files found.')
     return False
@@ -207,7 +215,7 @@ def main():
                     toFile(results)
                 e = showResults(results)
             except KeyboardInterrupt:
-                print("[e] KeyboardInterrupt exit programm...")
+                print("\n[e] KeyboardInterrupt exit programm...")
                 sys.exit(2)
     else:
         print("[e] no paths given...")
