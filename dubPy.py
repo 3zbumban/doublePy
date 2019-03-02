@@ -19,7 +19,7 @@ argparser = argparse.ArgumentParser(description="Find doublicate files, give one
 argparser.add_argument("-p", "--path", type=str, nargs="+", dest="paths", help="give one or more paths to dirs \nexample: -p \"I:\\example\\dir\\...\\...\"")
 argparser.add_argument("-td", "--topdown", action="store_true", dest="topdown", help="add '-r' to scan topdown")
 argparser.add_argument("-fl", "--links", action="store_true", dest="followlinks", help="add '-f' to follow symlinks")
-argparser.add_argument("-pl", "--play", action="store_true", dest="player", help="add '-p' or '--path' flag to user system own player")
+argparser.add_argument("-pl", "--play", action="store_true", dest="player", help="add '-pl' or '--play' flag to have play dialog")
 argparser.add_argument("-rm", "--remove", action="store_true", dest="rem", help="add '-r' or '--remove' flag to enable remove dialog")
 argparser.add_argument("-s", "--strategy", action="store_true", dest="strat", help="add '-s' or '--strategy' flag to ask for restart after removing a file")
 argparser.add_argument("-sf", "--save-file", action="store_true", dest="tofile", help="add '-sf' or '--save-file' flag to save to a file")
@@ -70,7 +70,7 @@ def findDup(parentFolder):
     # start scanning:
     dups = {}
     for dirName, subdirs, fileList in os.walk(parentFolder, topdown=t, followlinks=f):
-        print("[i] Scanning: {}...".format(dirName))
+        print("[i] Scanning: {}...\r".format(dirName), end="")
         for filename in fileList:
             # Get the path to the file
             path = os.path.join(dirName, filename)
@@ -159,7 +159,7 @@ def showResults(results):
             if args.frem and not args.player and not args.rem and not args.strat:
                 print("[i] removing second...")
                 send2trash(result[-1])
-            else:
+            elif args.player:
                 if(args.player):
                     if playResult(result):
                         return True
@@ -167,7 +167,7 @@ def showResults(results):
                         continue
                 else:
                     print("[e] dont use '-ao' flag with '-pl' '-rm' and '-s' flags")
-                    sys.exit(-2)
+                    # continue
     else:
         print('[A] No duplicate files found.')
     return False

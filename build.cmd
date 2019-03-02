@@ -1,0 +1,1 @@
+pyinstaller dubPy.py --onefile
