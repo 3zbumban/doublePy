@@ -12,6 +12,10 @@ from tkinter import filedialog
 
 BLOCK_SIZE = 65536
 CHAR_KONST = 97
+
+# file extensions to skipp, no .
+SKIPP = ["asd", "txt", "png", "jpg"]
+
 cols, rows = os.get_terminal_size()
 
 # cli arguments
@@ -72,6 +76,10 @@ def findDup(parentFolder):
     for dirName, subdirs, fileList in os.walk(parentFolder, topdown=t, followlinks=f):
         print("[i] Scanning: {}...\r".format(dirName), end="")
         for filename in fileList:
+            # skipp files
+            # print(filename.split(".")[-1] in SKIPP)
+            if filename.split(".")[-1] in SKIPP:
+                continue
             # Get the path to the file
             path = os.path.join(dirName, filename)
             # Calculate hash
