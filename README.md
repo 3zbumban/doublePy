@@ -1,8 +1,15 @@
 # doublePy
 
+> curently only for windows
+
 Drumkits often have the same samples.
 This script finds duplicates and lets you listen and remove them.
 Also works with other file types.
+
+## Pre dependencies
+
+* [git](https://git-scm.com/) _(optional)_
+* [python3](https://www.python.org/)
 
 ## Installation
 
