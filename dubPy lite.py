@@ -160,6 +160,7 @@ def showResults(results):
             print("_" * cols)
             print("Nr: {}\t{} duplicates...".format(c, len(result)))
             for subresult in result:
+                # if subresult == "DS_Store":
                 print('{}) \t{}' .format(ch ,subresult))
                 ch = chr(ord(ch) + 1)
             print("_" * cols)
